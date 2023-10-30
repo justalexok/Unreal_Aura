@@ -65,6 +65,7 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
 		ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+		UE_LOG(LogTemp,Display,TEXT("Test"));
 	}
 	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
