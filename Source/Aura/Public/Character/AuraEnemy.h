@@ -20,6 +20,8 @@ protected:
 
 	virtual void SetInitAbilityActorInfo() override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Character Class Defaults")
+	int32 Level = 1;
 public:
 
 	AAuraEnemy();
@@ -27,5 +29,10 @@ public:
 	//Enemy Interface
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
-	
+
+	//Combat Interface
+	virtual int32 GetPlayerLevel() override;
+
+private:
+
 };
