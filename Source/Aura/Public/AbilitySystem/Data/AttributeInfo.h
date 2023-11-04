@@ -33,7 +33,9 @@ class AURA_API UAttributeInfo : public UDataAsset
 {
 	GENERATED_BODY()
 
-	FAuraAttributeInfo FindAttributeInfoForTag(FGameplayTag& GameplayTag, bool bLogNotFound = false) const;
+public:
+
+	FAuraAttributeInfo FindAttributeInfoForTag(const FGameplayTag& AttributeTag, bool bLogNotFound = false) const;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
