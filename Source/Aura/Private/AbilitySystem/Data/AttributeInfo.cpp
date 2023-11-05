@@ -14,10 +14,7 @@ FAuraAttributeInfo UAttributeInfo::FindAttributeInfoForTag(const FGameplayTag& A
 			UE_LOG(LogTemp, Warning, TEXT("Info.AttributeTag == Attribute Tag."));
 			return Info;
 		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("Info.AttributeTag does not!=. attribute tag [%s] on AttributeInfo [%s].."),*AttributeTag.ToString(), *GetNameSafe(this));
-		}
+		//should match 1/x times where x = number of attributes
 	}
 	if (bLogNotFound)
 	{

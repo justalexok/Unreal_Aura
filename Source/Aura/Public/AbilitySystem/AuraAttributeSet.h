@@ -12,7 +12,7 @@
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
-  
+
 /**
  * 
  */
@@ -50,6 +50,9 @@ struct FEffectProperties
 	UPROPERTY()
 	ACharacter* TargetCharacter = nullptr;
 };
+typedef TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr FAttributeFuncPointer;
+//Can use generic typedef for generic signatures, see lecture 95 git commit
+
 
 UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
@@ -63,6 +66,9 @@ public:
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+
+	//Map of Tags and FunctionPointers that returns Attribute
+	TMap<FGameplayTag,FAttributeFuncPointer> TagsToAttributes;
 
 //Primary
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Strength, Category = "Primary Attributes")

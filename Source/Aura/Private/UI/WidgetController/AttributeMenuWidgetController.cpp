@@ -6,20 +6,44 @@
 #include "AbilitySystem/Data/AttributeInfo.h"
 #include "AuraGameplayTags.h"
 
+
+void UAttributeMenuWidgetController::BindCallbacksToDependencies()
+{
+	UAuraAttributeSet* AS = CastChecked<UAuraAttributeSet>(AttributeSet);
+	
+	check(AttributeInfo);
+
+	//Loop through the TagsToAttributes Map - Adding lambda to each delegate, that will broadcast the updated info
+	for (auto& Pair : AS->TagsToAttributes)
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
+[this, Pair](const FOnAttributeChangeData& Data)
+		{
+		BroadcastInfo(Pair.Key, Pair.Value());
+		}
+	);
+	}
+}
+
 void UAttributeMenuWidgetController::BroadcastInitialValues()
 {
 	UAuraAttributeSet* AS = CastChecked<UAuraAttributeSet>(AttributeSet);
 
 	check(AttributeInfo);
 
-	FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(FAuraGameplayTags::Get().Attributes_Primary_Strength, true);
-	Info.AttributeValue = AS->GetStrength();
-	AttributeInfoDelegate.Broadcast(Info);
-
+	//TagsToAttribute is a Key/Value map of GameplayTags and Function Pointers
+	for (const auto& Pair : AS->TagsToAttributes)
+	{
+		BroadcastInfo(Pair.Key, Pair.Value());
+	}
 }
 
-void UAttributeMenuWidgetController::BindCallbacksToDependencies()
+
+void UAttributeMenuWidgetController::BroadcastInfo(const FGameplayTag Tag, const FGameplayAttribute& Attribute) const
 {
-	
-
+	//Gets the Info for Tag, sets the new value to Info.AttributeValue, Broadcasts the Info.
+	FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Tag);
+	Info.AttributeValue = Attribute.GetNumericValue(AttributeSet);
+	AttributeInfoDelegate.Broadcast(Info);
 }
+
