@@ -12,6 +12,8 @@ class UInputAction;
 class UInputMappingContext;
 class IEnemyInterface;
 class UAuraInputConfig;
+class UAuraAbilitySystemComponent;
+class USplineComponent;
 /**
  * 
  */
@@ -49,5 +51,25 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UAuraInputConfig> InputConfig;
+
+	UPROPERTY()
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
+
+	UAuraAbilitySystemComponent* GetASC();
+
+	FVector CachedDestination; //The destination we last clicked on
+	float FollowTime = 0.f; //Time we've been holding down left mouse
+	float ShortPressThreshold = 0.5; //How long before we consider a short press becomes a hold press
+	bool bAutoRunning = false; //Are we autorunning?
+	bool bTargeting = false; //Did we click on a target or space to run to?
+
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius = 50.f; //What radius from destination do we stop autorunning
+
+	TObjectPtr<USplineComponent> Spline; // A smooth curve from a series of WorldContext points
+	
+
 	
 };
+
+
