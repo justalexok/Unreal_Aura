@@ -20,7 +20,7 @@ public:
       FGameplayTag Attributes_Primary_Resilience;
       FGameplayTag Attributes_Primary_Vigor;
 
-      //Secondary
+//Secondary
       FGameplayTag Attributes_Secondary_Armor;
       FGameplayTag Attributes_Secondary_ArmorPenetration;
       FGameplayTag Attributes_Secondary_BlockChance;
@@ -32,8 +32,7 @@ public:
       FGameplayTag Attributes_Secondary_MaxHealth;
       FGameplayTag Attributes_Secondary_MaxMana;
 
-      //Input
-
+//Input
      FGameplayTag InputTag_LMB;
      FGameplayTag InputTag_RMB;
      FGameplayTag InputTag_1;
