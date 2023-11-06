@@ -13,5 +13,4 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 
 	UKismetSystemLibrary::PrintString(this, FString("ActivateAbility (C++)"),true, true, FLinearColor::Yellow, 3);
 
-	//Test
 }
