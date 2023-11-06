@@ -23,8 +23,6 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 			AbilitySpec.DynamicAbilityTags.AddTag(AuraAbility->StartupInputTag);
 			GiveAbility(AbilitySpec);
 		}
-
-		
 	}
 }
 
@@ -32,10 +30,12 @@ void UAuraAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputT
 {
 	if (!InputTag.IsValid()) return;
 	{
+		//
 		for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 		{
 			if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
 			{
+				//ABILITY EXECUTED
 				AbilitySpecInputPressed(AbilitySpec); // Whether active or not, tell ASC that this AbilitySpec's input is being pressed
 				if (!AbilitySpec.IsActive())
 				{
