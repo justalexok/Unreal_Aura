@@ -12,4 +12,6 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
 	UKismetSystemLibrary::PrintString(this, FString("ActivateAbility (C++)"),true, true, FLinearColor::Yellow, 3);
+
+	//Test
 }
