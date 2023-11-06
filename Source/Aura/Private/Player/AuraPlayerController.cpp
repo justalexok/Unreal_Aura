@@ -85,6 +85,7 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 	{
 		bTargeting = ThisActor ? true: false;
 		bAutoRunning = false;
+		//After Pressed, AbilityInputTagHeld is called
 	}
 }
 
@@ -142,6 +143,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	{
 		if (GetASC())
 		{
+			//This is where the Ability is actually executed
 			GetASC()->AbilityInputTagHeld(InputTag);
 		}
 		return;
