@@ -44,7 +44,8 @@ private:
 
 	IEnemyInterface* ThisActor;
 	IEnemyInterface* LastActor;
-
+	FHitResult CursorHit;
+	
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
 	void AbilityInputTagHeld(FGameplayTag InputTag);
@@ -68,6 +69,7 @@ private:
 
 	TObjectPtr<USplineComponent> Spline; // A smooth curve from a series of WorldContext points
 	
+	void AutoRun();
 
 	
 };
