@@ -32,6 +32,12 @@ void AAuraCharacterBase::SetInitAbilityActorInfo()
 {
 }
 
+FVector AAuraCharacterBase::GetCombatSocketLocation()
+{
+	check(Weapon);
+	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
 void AAuraCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffect, float Level) const
 {
 	check(IsValid(GetAbilitySystemComponent()));
