@@ -4,6 +4,8 @@
 #include "AbilitySystem/Abilities/AuraProjectileSpell.h"
 #include "Character/AuraCharacterBase.h"
 #include "Actor/AuraProjectile.h"
+#include "Interaction/CombatInterface.h"
+
 
 void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                            const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
@@ -11,18 +13,16 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	const bool bIsSever = HasAuthority(&ActivationInfo);
+	if (!HasAuthority(&ActivationInfo)) return;
 
-	if (!bIsSever) return;
-
-	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetOwningActorFromActorInfo());
+	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
 	if (CombatInterface)
 	{
 		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
 		
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(SocketLocation);
-
+		
 		//TODO: Set the Projectile Rotation
 		
 		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
