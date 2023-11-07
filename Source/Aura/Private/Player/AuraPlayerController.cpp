@@ -83,7 +83,7 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 	//Only once button released will we know whether it was a short press (and therefore trigger autorunning) or not
 	if (InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
-		bTargeting = ThisActor ? true: false;
+		bTargeting = ThisActor ? true: false; //if clicked on an enemy actor
 		bAutoRunning = false;
 		//After Pressed, AbilityInputTagHeld is called
 	}
