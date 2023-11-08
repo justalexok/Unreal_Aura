@@ -79,7 +79,7 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
 	// GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, *InputTag.ToString());
 
-	//If Left Mouse Button, set bTargeting, and set AutoRunning to false
+	//If Left Mouse Button, set bTargeting, and set AutoRunning to false ->Fire at enemy
 	//Only once button released will we know whether it was a short press (and therefore trigger autorunning) or not
 	if (InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
@@ -92,7 +92,7 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	//If not Left Mouse Button released, 
+	//If not Left Mouse Button released, execute func and return
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
 		if (GetASC())
@@ -101,20 +101,18 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		}
 		return;
 	}
-	//Released LMB and targeting
-	if (bTargeting)
+
+	if (GetASC())
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagReleased(InputTag);
-		}
+		GetASC()->AbilityInputTagReleased(InputTag);
 	}
-	//Releasing LMB and not targeting
-	else
+	
+	//Released LMB -> Only if not targeting and shift key not down do we being autorun (if short press) 
+	if (!bTargeting && !bShiftKeyDown)
 	{
 		APawn* ControlledPawn = GetPawn();
 		if (FollowTime <= ShortPressThreshold && ControlledPawn) //then we have just short pressed
-		{
+			{
 			//Get a NavPath from PawnLocation to Cached Destination
 			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
 			{
@@ -129,11 +127,10 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				//Sets off in Tick
 				bAutoRunning = true;
 			}
-		}
+			}
 		FollowTime = 0.f;
 		bTargeting = false;
 	}
-
 }
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
@@ -148,8 +145,8 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		}
 		return;
 	}
-	//Pressing LMB and Targeting
-	if (bTargeting)
+	//Pressing LMB and Targeting or Pressing LMB and ShiftKeyDown -> Execute FireBolt Ability
+	if (bTargeting || bShiftKeyDown)
 	{
 		if (GetASC())
 		{
@@ -215,7 +212,10 @@ void AAuraPlayerController::SetupInputComponent()
 
 	//Bind Move to Move Action
 	AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
-
+	//Bind Shift Key to Boolean bShiftKeyDown
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AAuraPlayerController::ShiftPressed);
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AAuraPlayerController::ShiftReleased);
+	
 	AuraInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased,&ThisClass::AbilityInputTagHeld);
 }
 
