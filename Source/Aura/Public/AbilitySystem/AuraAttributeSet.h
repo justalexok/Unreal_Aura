@@ -178,7 +178,7 @@ public:
 	void OnRep_Mana(const FGameplayAttributeData OldMana) const;
 	
 private:	
-	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties Props) const;
+	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 };
 
 
