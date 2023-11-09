@@ -5,22 +5,9 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Aura/Aura.h"
+#include "Components/WidgetComponent.h"
+#include "UI/Widget/AuraUserWidget.h"
 
-
-void AAuraEnemy::BeginPlay()
-{
-	Super::BeginPlay();
-	SetInitAbilityActorInfo();
-	
-}
-
-void AAuraEnemy::SetInitAbilityActorInfo()
-{
-	AbilitySystemComponent->InitAbilityActorInfo(this,this);
-	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
-
-	InitializeDefaultAttributes();
-}
 
 AAuraEnemy::AAuraEnemy()
 {
@@ -31,7 +18,66 @@ AAuraEnemy::AAuraEnemy()
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
+
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	HealthBar->SetupAttachment(GetRootComponent());
+
 }
+
+void AAuraEnemy::BeginPlay()
+{
+	Super::BeginPlay();
+	SetInitAbilityActorInfo();
+
+	//Set the Enemy's HealthBars Widget Controller to this enemy class
+	if (UAuraUserWidget* AuraUserWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
+	{
+		AuraUserWidget->SetWidgetController(this);
+		// UE_LOG(LogTemp,Display,TEXT("GOT HERE"));
+
+	}
+
+	AssignDelegatesForAttributeChanges();
+
+}
+
+void AAuraEnemy::SetInitAbilityActorInfo()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+	InitializeDefaultAttributes();
+
+	
+}
+
+void AAuraEnemy::AssignDelegatesForAttributeChanges() const
+{
+	if (UAuraAttributeSet* AS = Cast<UAuraAttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AS->GetHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData Data)
+			{
+				OnHealthChanged.Broadcast(Data.NewValue);
+				
+			}
+		);
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AS->GetMaxHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData Data)
+			{
+				OnMaxHealthChanged.Broadcast(Data.NewValue);
+				
+			}
+		);
+
+		OnHealthChanged.Broadcast(AS->GetHealth());
+		OnMaxHealthChanged.Broadcast(AS->GetMaxHealth());
+
+	}
+}
+
+
+
 
 void AAuraEnemy::HighlightActor()
 {
@@ -51,3 +97,4 @@ int32 AAuraEnemy::GetPlayerLevel()
 {
 	return Level;
 }
+
