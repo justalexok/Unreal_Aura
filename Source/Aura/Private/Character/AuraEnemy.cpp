@@ -56,7 +56,6 @@ void AAuraEnemy::InitializeDefaultAttributes() const
 {
 	UAuraAbilitySystemLibrary::InitializeDefaultAttributes(this,CharacterClass,Level,AbilitySystemComponent);
 
-	
 }
 
 void AAuraEnemy::AssignDelegatesForAttributeChanges() const
@@ -80,6 +79,10 @@ void AAuraEnemy::AssignDelegatesForAttributeChanges() const
 
 		OnHealthChanged.Broadcast(AS->GetHealth());
 		OnMaxHealthChanged.Broadcast(AS->GetMaxHealth());
+
+		GEngine->AddOnScreenDebugMessage(1,50,FColor::Green,FString::Printf(TEXT("Resilience %f"), AS->GetResilience()));
+		GEngine->AddOnScreenDebugMessage(2,50,FColor::Blue,FString::Printf(TEXT("Vigor %f"), AS->GetVigor()));
+
 
 	}
 }
