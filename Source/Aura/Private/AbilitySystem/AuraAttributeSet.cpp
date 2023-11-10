@@ -9,6 +9,7 @@
 #include "GameFramework/Character.h"
 #include "GameplayEffectExtension.h"
 #include "AuraGameplayTags.h"
+#include "Interaction/CombatInterface.h"
 
 
 UAuraAttributeSet::UAuraAttributeSet()
@@ -107,10 +108,14 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			const float NewHealth = GetHealth() - LocalIncomingDamage;
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 
-			const bool bFatal = NewHealth <0.f;
-			if (bFatal)
+			const bool bFatal = NewHealth <=0.f;
+			if (bFatal) //DIE
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Fatal Damage to %s!"), *Props.TargetAvatarActor->GetName());
+				if (ICombatInterface* CombatInterface = Cast<ICombatInterface>( Props.TargetAvatarActor))
+				{
+					CombatInterface->Die();
+				}
 
 			}
 			else
@@ -118,10 +123,11 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				//Activate Ability if TargetASC has one that has the HitReact Tag
 				FGameplayTagContainer TagContainer;
 				TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
-				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer); 
 			}
+			UE_LOG(LogTemp, Warning, TEXT("Damage was %f. Changed Health on %s, Health: %f [Using MetaAttribute]"),LocalIncomingDamage, *Props.TargetAvatarActor->GetName(), GetHealth());
+
 		}
-		UE_LOG(LogTemp, Warning, TEXT("Changed Health on %s, Health: %f [Using MetaAttribute]"), *Props.TargetAvatarActor->GetName(), GetHealth());
 
 	}
 
