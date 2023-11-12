@@ -10,6 +10,8 @@
 #include "GameplayEffectExtension.h"
 #include "AuraGameplayTags.h"
 #include "Interaction/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include "Player/AuraPlayerController.h"
 
 
 UAuraAttributeSet::UAuraAttributeSet()
@@ -127,12 +129,24 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			}
 			UE_LOG(LogTemp, Warning, TEXT("Damage was %f. Changed Health on %s, Health: %f [Using MetaAttribute]"),LocalIncomingDamage, *Props.TargetAvatarActor->GetName(), GetHealth());
 
+			ShowFloatingText(Props,LocalIncomingDamage);
+			
 		}
 
 	}
 
 }
-
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+{
+	//Show Damage Widget
+	if (Props.SourceCharacter != Props.TargetCharacter)
+	{
+		if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
+		{
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+		}
+	}
+}
 
 void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const
 {
