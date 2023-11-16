@@ -128,7 +128,6 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer); 
 			}
-			UE_LOG(LogTemp, Warning, TEXT("Damage was %f. Changed Health on %s, Health: %f [Using MetaAttribute]"),LocalIncomingDamage, *Props.TargetAvatarActor->GetName(), GetHealth());
 
 			const bool bBlock = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
 			const bool bCriticalHit = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
@@ -146,9 +145,17 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float D
 	{
 		if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
 		{
-			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
 		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Damage was %f. Changed Health on %s, Health: %f, Was Blocked: %s, Was Critical Hit: %s. [Using MetaAttribute]"),
+		Damage,
+		*Props.TargetAvatarActor->GetName(),
+		GetHealth(),
+		bBlockedHit ? TEXT("True") : TEXT("False"), 
+		bCriticalHit ? TEXT("True") : TEXT("False")
+		);
+
 }
 
 void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const
