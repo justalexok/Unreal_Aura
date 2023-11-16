@@ -48,12 +48,12 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		EffectContextHandle.SetAbility(this);
 		EffectContextHandle.AddSourceObject(Projectile);
 		TArray<TWeakObjectPtr<AActor>> Actors;
-		Actors.Add(Projectile)
+		Actors.Add(Projectile);
 		EffectContextHandle.AddActors(Actors);
 		FHitResult HitResult;
 		HitResult.Location = ProjectileTargetLocation;
-		EffectContextHandle.AddHitResult(HitResult);
 		
+		EffectContextHandle.AddHitResult(HitResult);
 		const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(),EffectContextHandle );
 
 		Projectile->DamageEffectSpecHandle = SpecHandle;
