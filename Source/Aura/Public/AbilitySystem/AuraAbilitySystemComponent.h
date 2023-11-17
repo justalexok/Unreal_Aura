@@ -26,7 +26,7 @@ public:
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 	
 protected:
-	//To make function executed on client side as well as server
+	//To make function execute on client side as well as server
 	UFUNCTION(Client,Reliable)
 	virtual void ClientEffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle);
 	

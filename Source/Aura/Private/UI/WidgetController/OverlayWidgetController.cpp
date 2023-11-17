@@ -22,21 +22,6 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 {
 	const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
 
-	// Binding HealthChanged function to the delegate that is broadcast when Health Attribute changes	
-	// AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute())
-	// .AddUObject(this, &UOverlayWidgetController::HealthChanged);
-
-	// AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute())
-	// .AddUObject(this, &UOverlayWidgetController::MaxHealthChanged);
-
-	// AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetManaAttribute())
-	// .AddUObject(this, &UOverlayWidgetController::ManaChanged);
-	//
-	// AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxManaAttribute())
-	// .AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
-
-	//Replacing Callbacks with Lambdas
-	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute()).AddLambda(
 [this](const FOnAttributeChangeData& Data){OnHealthChanged.Broadcast(Data.NewValue);	} );
 	
