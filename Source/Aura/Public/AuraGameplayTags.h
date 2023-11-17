@@ -40,10 +40,19 @@ public:
      FGameplayTag InputTag_3;
      FGameplayTag InputTag_4;
 
-//
+//Resistances
+	FGameplayTag Attributes_Resistance_Fire;
+	FGameplayTag Attributes_Resistance_Lightning;
+	FGameplayTag Attributes_Resistance_Arcane;
+	FGameplayTag Attributes_Resistance_Physical;
+
+//DamageTypes
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
-	TArray<FGameplayTag> DamageTypes;
+	FGameplayTag Damage_Lightning;
+	FGameplayTag Damage_Arcane;
+	FGameplayTag Damage_Physical;
+	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 
 //
 	FGameplayTag Effects_HitReact;
