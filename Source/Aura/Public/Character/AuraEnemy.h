@@ -75,4 +75,11 @@ public:
 	float LifeSpan = 5.f;
 	
 	void AssignDelegatesForAttributeChanges() const;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	TObjectPtr<AActor> CombatTarget;
+
+	virtual AActor* GetCombatTarget_Implementation() const override;
+
+	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
 };

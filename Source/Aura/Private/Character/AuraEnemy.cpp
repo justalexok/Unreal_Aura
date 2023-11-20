@@ -59,7 +59,7 @@ void AAuraEnemy::BeginPlay()
 	SetInitAbilityActorInfo();
 	if (HasAuthority())
 	{
-		UAuraAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
+		UAuraAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent, CharacterClass);
 	}
 	
 	//Set the Enemy's HealthBars Widget Controller to this enemy class
@@ -122,6 +122,16 @@ void AAuraEnemy::AssignDelegatesForAttributeChanges() const
 
 
 	}
+}
+
+AActor* AAuraEnemy::GetCombatTarget_Implementation() const
+{
+	return CombatTarget;
+}
+
+void AAuraEnemy::SetCombatTarget_Implementation(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
 }
 
 
