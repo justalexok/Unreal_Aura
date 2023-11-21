@@ -155,7 +155,14 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float D
 	//Show Damage Widget
 	if (Props.SourceCharacter != Props.TargetCharacter)
 	{
+		//if Aura is the causer of the damage
 		if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(Props.SourceCharacter->Controller))
+		{
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
+			return;
+		}
+		//if Aura is the target (i.e. Damage was done to Aura by Enemy)
+		if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(Props.TargetCharacter->Controller))
 		{
 			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
 		}
