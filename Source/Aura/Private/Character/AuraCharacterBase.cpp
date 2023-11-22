@@ -60,6 +60,7 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 	Dissolve();
 
 	bDead = true;
+
 }
 
 void AAuraCharacterBase::BeginPlay()
