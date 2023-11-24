@@ -138,7 +138,8 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				//Activate Ability if TargetASC has one that has the HitReact Tag
 				FGameplayTagContainer TagContainer;
 				TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
-				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer); 
+				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+				
 			}
 
 			const bool bBlock = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
