@@ -28,9 +28,11 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 
 void UAuraAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
+	
+	
 	if (!InputTag.IsValid()) return;
 	{
-		//
+		// GEngine->AddOnScreenDebugMessage(-1,1,FColor::Blue,FString::Printf(TEXT("Valid Input Tag Held %s"), *InputTag.ToString()));
 		for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 		{
 			if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
@@ -40,6 +42,7 @@ void UAuraAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputT
 				if (!AbilitySpec.IsActive())
 				{
 					TryActivateAbility(AbilitySpec.Handle);
+					// GEngine->AddOnScreenDebugMessage(-1,1,FColor::Red,FString("Tried to activate ability - Ability Spec is valid!"));
 				}
 			}
 		}
