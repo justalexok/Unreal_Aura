@@ -44,6 +44,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		else //Abilities not given yet, bind for when they are
 		{
 			AuraASC->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::OnInitializeStartupAbilities);
+			//They get broadcast in the AuraASC AddCharacterAbilities, and pass in "this"
 		}
 
 		AuraASC->EffectAssetTags.AddLambda(
