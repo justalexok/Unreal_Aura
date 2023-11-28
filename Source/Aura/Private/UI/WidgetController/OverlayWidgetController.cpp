@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "AbilitySystem/Data/AbillityInfo.h"
 
 
 void UOverlayWidgetController::BroadcastInitialValues()
@@ -57,20 +58,35 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 				{
 					const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
 					MessageWidgetRowDelegate.Broadcast(*Row);
-				}
-				
-				
+				}		
 			}
 		}	
 	);
-	}
-	
+	}	
 }
 
 void UOverlayWidgetController::OnInitializeStartupAbilities(UAuraAbilitySystemComponent* AuraASC)
 {
-	//TODO Get info about all given abilities, look up their Ability Info and broadcast it to widgets
+	//Get info about all given abilities, look up their Ability Info and broadcast it to widgets
 
 	if (!AuraASC->bStartupAbilitiesGiven) return ;
+
+	FForEachAbility BroadcastDelegate;
+	BroadcastDelegate.BindLambda([this, AuraASC](const FGameplayAbilitySpec& AbilitySpec)
+	{
+		//Get the AbilityTag and InputTag for a given ability spec
+		const FGameplayTag AbilityTag = AuraASC->GetAbilityTagFromSpec(AbilitySpec);
+		const FGameplayTag InputTag = AuraASC->GetInputTagFromSpec(AbilitySpec);
+		//Get the AbilityInfo for that AbilityTag
+		FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
+		//Set the AbilityInfo's InputTag
+		Info.InputTag = InputTag;
+
+		//Broadcast the info to the AbilityInfoDelegate -> Will be received by the Widgets (SpellGlobe)
+		AbilityInfoDelegate.Broadcast(Info);
+		
+	});
+	//Loops through each ability, and executes the broadcast delegate if the delegate has a callback bound to it
+	AuraASC->ForEachAbility(BroadcastDelegate);
 }
 
