@@ -34,8 +34,18 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxManaAttribute()).AddLambda(
 [this](const FOnAttributeChangeData& Data){OnMaxManaChanged.Broadcast(Data.NewValue);	} );
 	
+	if (UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent))
+	{
+		if (AuraASC->bStartupAbilitiesGiven) //Abilities given, call the func directly
+		{
+			OnInitializeStartupAbilities(AuraASC);
+		}
+		else //Abilities not given yet, bind for when they are
+		{
+			AuraASC->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::OnInitializeStartupAbilities);
+		}
 
-	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+		AuraASC->EffectAssetTags.AddLambda(
 		[this](const FGameplayTagContainer& AssetTags)
 		{
 			
@@ -53,25 +63,14 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 			}
 		}	
 	);
+	}
+	
 }
 
-// void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const
-// {
-//
-// 	OnHealthChanged.Broadcast(Data.NewValue);
-// }
-//
-// void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Data) const
-// {
-// 	OnMaxHealthChanged.Broadcast(Data.NewValue);
-// }
-//
-// void UOverlayWidgetController::ManaChanged(const FOnAttributeChangeData& Data) const
-// {
-// 	OnManaChanged.Broadcast(Data.NewValue);
-// }
-//
-// void UOverlayWidgetController::MaxManaChanged(const FOnAttributeChangeData& Data) const
-// {
-// 	OnMaxManaChanged.Broadcast(Data.NewValue);
-// }
+void UOverlayWidgetController::OnInitializeStartupAbilities(UAuraAbilitySystemComponent* AuraASC)
+{
+	//TODO Get info about all given abilities, look up their Ability Info and broadcast it to widgets
+
+	if (!AuraASC->bStartupAbilitiesGiven) return ;
+}
+
