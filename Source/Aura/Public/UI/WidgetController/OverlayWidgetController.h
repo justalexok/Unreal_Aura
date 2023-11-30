@@ -87,6 +87,7 @@ protected:
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
 
 	void OnInitializeStartupAbilities(UAuraAbilitySystemComponent* AuraASC);
+	
 	void OnXPChanged(int32 NewXP) const;
 
 	};

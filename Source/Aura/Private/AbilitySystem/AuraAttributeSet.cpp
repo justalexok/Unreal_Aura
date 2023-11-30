@@ -117,6 +117,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
 	{
 		const float LocalIncomingDamage = GetIncomingDamage();
+		
 		SetIncomingDamage(0.f);
 		if (LocalIncomingDamage > 0.f)
 		{
@@ -126,7 +127,8 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			const bool bFatal = NewHealth <=0.f;
 			if (bFatal) //DIE
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Fatal Damage to %s!"), *Props.TargetAvatarActor->GetName());
+				//Send Gameplay Event with Meta Attribute XP
+				UE_LOG(LogTemp, Warning, TEXT("Fatal Damage to %s!"), *Props.TargetAvatarActor->GetName());	
 				if (ICombatInterface* CombatInterface = Cast<ICombatInterface>( Props.TargetAvatarActor))
 				{
 					CombatInterface->Die();
@@ -148,6 +150,12 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			
 		}
 
+	}
+	if (Data.EvaluatedData.Attribute == GetIncomingXPAttribute())
+	{
+		const float LocalIncomingXPAmount = GetIncomingXP();
+		SetIncomingXP(0);
+		UE_LOG(LogTemp, Warning, TEXT("Incoming XP: %f!"), LocalIncomingXPAmount);
 	}
 
 }
