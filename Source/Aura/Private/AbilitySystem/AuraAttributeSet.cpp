@@ -157,11 +157,34 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	{
 		const float LocalIncomingXPAmount = GetIncomingXP();
 		SetIncomingXP(0);
-		UE_LOG(LogTemp, Warning, TEXT("Incoming XP: %f!"), LocalIncomingXPAmount);
 		
-		IPlayerInterface::Execute_AddToXP(Props.SourceCharacter, LocalIncomingXPAmount);
+		UE_LOG(LogTemp, Warning, TEXT("Incoming XP: %f!"), LocalIncomingXPAmount);
 
-		//TODO SEE if we should level up
+		// Source Character is the owner, since GA_ListenForEvents applies GE_EventBasedEffect, adding to IncomingXP
+		if (Props.SourceCharacter->Implements<UPlayerInterface>() && Props.SourceCharacter->Implements<UCombatInterface>())
+		{
+			const int32 CurrentLevel = ICombatInterface::Execute_GetPlayerLevel(Props.SourceCharacter);
+			const int32 CurrentXP = IPlayerInterface::Execute_GetXP(Props.SourceCharacter);
+			const int32 NewLevel = IPlayerInterface::Execute_FindPlayerLevelForXP(Props.SourceCharacter, CurrentXP + LocalIncomingXPAmount);
+			const int32 NumLevelUps = NewLevel - CurrentLevel;
+			
+			if (NumLevelUps > 0)
+			{
+				//We have levelled up
+				IPlayerInterface::Execute_LevelUp(Props.SourceCharacter);
+				const int32 AttributePointsReward = IPlayerInterface::Execute_GetAttributePointsReward(Props.SourceCharacter, CurrentLevel);
+				const int32 SpellPointsReward = IPlayerInterface::Execute_GetSpellPointsReward(Props.SourceCharacter, CurrentLevel);
+				IPlayerInterface::Execute_AddToPlayerLevel(Props.SourceCharacter, NumLevelUps);
+				IPlayerInterface::Execute_AddToAttributePoints(Props.SourceCharacter, AttributePointsReward);
+				IPlayerInterface::Execute_AddToSpellPoints(Props.SourceCharacter, SpellPointsReward);
+
+				SetHealth(GetMaxHealth());
+				SetMana(GetMaxMana());
+			}
+			IPlayerInterface::Execute_AddToXP(Props.SourceCharacter, LocalIncomingXPAmount);
+			
+		}
+
 	}
 
 }
@@ -182,14 +205,6 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float D
 			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Damage was %f. Changed Health on %s, Health: %f, Was Blocked: %s, Was Critical Hit: %s. [Using MetaAttribute]"),
-		Damage,
-		*Props.TargetAvatarActor->GetName(),
-		GetHealth(),
-		bBlockedHit ? TEXT("True") : TEXT("False"), 
-		bCriticalHit ? TEXT("True") : TEXT("False")
-		);
-
 }
 
 void UAuraAttributeSet::SendXPEvent(FEffectProperties& Props)
