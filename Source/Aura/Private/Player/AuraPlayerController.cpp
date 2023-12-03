@@ -47,6 +47,17 @@ void AAuraPlayerController::ShowDamageNumber_Implementation(float DamageAmount, 
 }
 
 
+void AAuraPlayerController::ShowLevelUpNumber_Implementation(int32 NewLevel, ACharacter* TargetCharacter)
+{
+	// if (IsValid(TargetCharacter) && LevelUpTextComponentClass && IsLocalController())
+	// {
+	// 	ULevelUpTextComponent* LevelUpText = NewObject<ULevelUpTextComponent>(TargetCharacter, LevelUpTextComponentClass);
+	// 	LevelUpText->RegisterComponent();
+	// 	LevelUpText->AttachToComponent(TargetCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	// 	LevelUpText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+	// 	LevelUpText->SetLevelUpText(NewLevel);
+	// }
+}
 
 void AAuraPlayerController::AutoRun()
 {
@@ -197,6 +208,7 @@ UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()
 	}
 	return AuraAbilitySystemComponent;
 }
+
 
 
 void AAuraPlayerController::BeginPlay()

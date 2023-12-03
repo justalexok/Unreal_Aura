@@ -178,6 +178,9 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				IPlayerInterface::Execute_AddToAttributePoints(Props.SourceCharacter, AttributePointsReward);
 				IPlayerInterface::Execute_AddToSpellPoints(Props.SourceCharacter, SpellPointsReward);
 
+				//ShowLevelUpAnim
+				// ShowLevelUpText(Props, NewLevel);
+;
 				SetHealth(GetMaxHealth());
 				SetMana(GetMaxMana());
 			}
@@ -207,6 +210,15 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float D
 	}
 }
 
+void UAuraAttributeSet::ShowLevelUpText(FEffectProperties& Props, int32 NewLevel)
+{
+	
+	if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(Props.SourceCharacter->Controller))
+	{
+		PC->ShowLevelUpNumber(NewLevel,Props.SourceCharacter);
+		
+	}
+}
 void UAuraAttributeSet::SendXPEvent(FEffectProperties& Props)
 {
 
@@ -224,6 +236,7 @@ void UAuraAttributeSet::SendXPEvent(FEffectProperties& Props)
 	}
 	
 }
+
 
 void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const
 {

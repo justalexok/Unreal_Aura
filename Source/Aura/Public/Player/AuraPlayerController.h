@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "GameplayTagContainer.h"
+#include "UI/Widget/LevelUpTextComponent.h"
 #include "AuraPlayerController.generated.h"
 
 class UDamageTextComponent;
@@ -30,6 +31,9 @@ public:
 	UFUNCTION(Client, Reliable)
 	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter, bool bBlockedHit, bool bCriticalHit);
 
+	UFUNCTION(Client, Reliable)
+	void ShowLevelUpNumber(int32 NewLevel, ACharacter* TargetCharacter);
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -83,6 +87,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ULevelUpTextComponent> LevelUpTextComponentClass;
 };
 
 

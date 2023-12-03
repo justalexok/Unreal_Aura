@@ -217,6 +217,7 @@ private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 	void ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit) const;
 	void SendXPEvent(FEffectProperties& Props);
+	void ShowLevelUpText(FEffectProperties& Props, int32 NewLevel);
 };
 
 
