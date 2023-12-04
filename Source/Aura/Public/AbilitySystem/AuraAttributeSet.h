@@ -66,7 +66,8 @@ public:
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
-
+	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
+	
 	//Map of Tags and FunctionPointers that returns Attribute
 	TMap<FGameplayTag,FAttributeFuncPointer> TagsToAttributes;
 
@@ -218,6 +219,8 @@ private:
 	void ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit) const;
 	void SendXPEvent(FEffectProperties& Props);
 	void ShowLevelUpText(FEffectProperties& Props, int32 NewLevel);
+	bool bTopOffHealth = false;
+	bool bTopOffMana = false;
 };
 
 
