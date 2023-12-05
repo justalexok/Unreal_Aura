@@ -39,6 +39,8 @@ void UAuraWidgetController::BroadcastAbilityInfo()
 		const FGameplayTag InputTag = GetAuraASC()->GetInputTagFromSpec(AbilitySpec);
 		//Get the AbilityInfo for that AbilityTag
 		FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
+		//Get the Status Info
+		Info.StatusTag = GetAuraASC()->GetStatusFromSpec(AbilitySpec);
 		//Set the AbilityInfo's InputTag
 		Info.InputTag = InputTag;
 
