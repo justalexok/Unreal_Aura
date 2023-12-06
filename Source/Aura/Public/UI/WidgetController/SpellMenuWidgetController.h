@@ -37,6 +37,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="AuraAbilitySystemLibrary/SpellMenu")
 	void SpellGlobeSelected(const FGameplayTag& AbilityTag);
 
+	UFUNCTION(BlueprintCallable)
+	void SpendPointButtonPressed();
+
 	static void ShouldEnableButtons(const FGameplayTag& StatusTag, int32 SpellPoints,  bool& bShouldEnableSpellPointsButton, bool& bShouldEnableEquipButton);
 
 private:
