@@ -200,6 +200,13 @@ void UAuraAbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
 	}
 }
 
+// void UAuraAbilitySystemComponent::UpdateSpellPoints(int32 SpellPoints)
+// {
+// 	//Broadcast
+// 	// ClientUpdateSpellPoints(SpellPoints);
+// 	
+// }
+
 void UAuraAbilitySystemComponent::ServerUpgradeAttribute_Implementation(const FGameplayTag& AttributeTag)
 {
 	FGameplayEventData Payload;
@@ -228,7 +235,7 @@ void UAuraAbilitySystemComponent::OnRep_ActivateAbilities()
 }
 
 void UAuraAbilitySystemComponent::ClientUpdateAbilityStatus_Implementation(const FGameplayTag& AbilityTag,
-	const FGameplayTag& StatusTag)
+                                                                           const FGameplayTag& StatusTag)
 {
 	AbilityStatusChanged.Broadcast(AbilityTag,StatusTag);
 }
