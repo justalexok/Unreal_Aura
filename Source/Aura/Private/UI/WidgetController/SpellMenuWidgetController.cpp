@@ -63,6 +63,14 @@ void USpellMenuWidgetController::BroadcastInitialValues()
 
 void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityTag)
 {
+	if (bWaitingForEquipSelection)
+	{
+		const FGameplayTag SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
+		StopWaitingForEquipDelegate.Broadcast(SelectedAbilityType);
+		bWaitingForEquipSelection = false;
+	}
+	
+	
 	const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();	
 	const int32 SpellPoints = GetAuraPS()->GetSpellPoints();
 	FGameplayTag AbilityStatus;	
@@ -122,6 +130,29 @@ void USpellMenuWidgetController::ShouldEnableButtons(const FGameplayTag& StatusT
 	{
 		bShouldEnableSpellPointsButton = false;
 	}
+}
+
+void USpellMenuWidgetController::DeselectGlobe()
+{
+	if (bWaitingForEquipSelection)
+	{
+		const FGameplayTag SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
+		StopWaitingForEquipDelegate.Broadcast(SelectedAbilityType);
+		bWaitingForEquipSelection = false;
+	}
+	
+	SelectedAbility.Ability = FAuraGameplayTags::Get().Abilities_Type_None;
+	SelectedAbility.Status = FAuraGameplayTags::Get().Abilities_Status_Locked;
+	SpellGlobeSelectedDelegate.Broadcast(false,false,FString(),FString());
+}
+
+void USpellMenuWidgetController::EquipButtonPressed()
+{
+	//Tell Widget what type of ability is selected, so it can play the animation for passive/ offensive
+
+	FGameplayTag AbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
+	WaitForEquipDelegate.Broadcast(AbilityType);
+	bWaitingForEquipSelection = true;
 }
 
 
