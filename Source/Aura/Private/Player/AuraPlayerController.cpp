@@ -133,7 +133,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		GetASC()->AbilityInputTagReleased(InputTag);
 	}
 	
-	//Released LMB -> Only if not targeting and shift key not down do we being autorun (if short press) 
+	//Released LMB -> Only if not targeting and shift key not down do we begin autorun (if short press) 
 	if (!bTargeting && !bShiftKeyDown)
 	{
 		APawn* ControlledPawn = GetPawn();

@@ -158,8 +158,7 @@ void USpellMenuWidgetController::SpellRowGlobePressed(const FGameplayTag& SlotTa
 	
 }
 
-void USpellMenuWidgetController::OnAbilityEquipped(const FGameplayTag& AbilityTag, const FGameplayTag& Status,
-	const FGameplayTag& Slot, const FGameplayTag& PreviousSlot)
+void USpellMenuWidgetController::OnAbilityEquipped(const FGameplayTag& AbilityTag, const FGameplayTag& Status,const FGameplayTag& Slot, const FGameplayTag& PreviousSlot)
 {
 	bWaitingForEquipSelection = false;
 
@@ -179,6 +178,10 @@ void USpellMenuWidgetController::OnAbilityEquipped(const FGameplayTag& AbilityTa
 
 	//Stop animating the offensive / passive sections
 	StopWaitingForEquipDelegate.Broadcast(AbilityInfo->FindAbilityInfoForTag(AbilityTag).AbilityType);
+
+	
+	SpellGlobeReassignedDelegate.Broadcast(AbilityTag); //tells widget to deselect all globes
+	DeselectGlobe(); //clear out description boxes and disable buttons
 	
 }
 
