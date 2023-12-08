@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "AuraAbilitySystemLibrary.generated.h"
 
+struct FDamageEffectParams;
 struct FAuraAbilityInfo;
 struct FGameplayEffectContextHandle;
 class UAbillityInfo;
@@ -49,8 +50,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category="AuraAbilitySystemLibrary/CharacterClassDefaults")
 	static UAbillityInfo* GetAbilityInfo(const UObject* WorldContextObject);
 
-	
-	
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayEffects")
 	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);
 
@@ -69,6 +68,8 @@ public:
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayMechanics")
 	static bool IsNotFriend(AActor* FirstActor, AActor* SecondActor);
 	
-	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayMechanics")
-	static int32 GetXPRewardForCharacterClassAndLevelconst(const UObject* WorldContextObject, ECharacterClass CharacterClass, int32 CharacterLevel);
+	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|DamageEffect")
+	static FGameplayEffectContextHandle ApplyDamageEffect(FDamageEffectParams Params);
+	
+	static int32 GetXPRewardForCharacterClassAndLevel(const UObject* WorldContextObject, ECharacterClass CharacterClass, int32 CharacterLevel);
 };

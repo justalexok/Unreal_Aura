@@ -243,7 +243,7 @@ void UAuraAttributeSet::SendXPEvent(FEffectProperties& Props)
 	{
 		const int32 TargetLevel = ICombatInterface::Execute_GetPlayerLevel(Props.TargetCharacter);
 		const ECharacterClass CharacterClass = ICombatInterface::Execute_GetCharacterClass(Props.TargetCharacter);
-		int32 XPReward = UAuraAbilitySystemLibrary::GetXPRewardForCharacterClassAndLevelconst(Props.TargetCharacter, CharacterClass, TargetLevel);
+		int32 XPReward = UAuraAbilitySystemLibrary::GetXPRewardForCharacterClassAndLevel(Props.TargetCharacter, CharacterClass, TargetLevel);
 
 		const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
 		FGameplayEventData Payload;
