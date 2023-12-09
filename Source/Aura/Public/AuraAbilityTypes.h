@@ -56,9 +56,19 @@ public:
 
 	bool IsCriticalHit() const {return  bIsCriticalHit; }
 	bool IsBlockedHit() const {return bIsBlockedHit; }
+	bool IsSuccessfullDebuff() const {return bIsSuccessfulDebuff; }
+	float GetDebuffDamage() const {return DebuffDamage; }
+	float GetDebuffDuration() const {return DebuffDuration; }
+	float GetDebuffFrequency() const {return DebuffFrequency; }
+	TSharedPtr<FGameplayTag> GetDamageType() const { return DamageType; }
 
 	void SetIsCriticalHit(const bool InIsCriticalHit) {bIsCriticalHit = InIsCriticalHit; }
 	void SetIsBlockedHit(const bool InIsBlockedHit) {bIsBlockedHit = InIsBlockedHit; }
+	void SetIsSuccessfulDebuff(const bool InIsSuccessfulDebuff) {bIsSuccessfulDebuff = InIsSuccessfulDebuff; }
+	void SetDebuffDamage(const float InDamage) {DebuffDamage = InDamage; }
+	void SetDebuffDuration(const float InDuration) {DebuffDuration = InDuration; }
+	void SetDebuffFrequency(const float InFrequency) {DebuffFrequency = InFrequency; }
+
 
 	/** Returns the actual struct used for serialization, subclasses must override this! */
 	virtual UScriptStruct* GetScriptStruct() const
@@ -86,9 +96,19 @@ protected:
 
 	UPROPERTY()
 	bool bIsBlockedHit = false;
-
 	UPROPERTY()
 	bool bIsCriticalHit = false;
+
+	UPROPERTY()
+	bool bIsSuccessfulDebuff = false;
+	UPROPERTY()
+	float DebuffDamage = 0.f;
+	UPROPERTY()
+	float DebuffDuration = 0.f;
+	UPROPERTY()
+	float DebuffFrequency = 0.f;
+
+	TSharedPtr<FGameplayTag> DamageType;
 };
 
 template<>

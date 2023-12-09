@@ -149,7 +149,10 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			const bool bBlock = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
 			const bool bCriticalHit = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
 			ShowFloatingText(Props,LocalIncomingDamage, bBlock, bCriticalHit);
-			
+
+			const bool bShouldDebuff = UAuraAbilitySystemLibrary::IsSuccessfulDebuff((Props.EffectContextHandle));
+			const float DebuffDamage =  UAuraAbilitySystemLibrary::GetDebuffDamage((Props.EffectContextHandle));
+			//and other getters
 		}
 
 	}

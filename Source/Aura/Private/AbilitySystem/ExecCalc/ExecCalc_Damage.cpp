@@ -88,7 +88,10 @@ void UExecCalc_Damage::DetermineDebuff(const FGameplayEffectCustomExecutionParam
 			const bool bDebuff = FMath::RandRange(1, 100) < EffectiveDebuffChance;
 			if (bDebuff)
 			{
-				//TODO: What do we do?
+				//Add Debuff Info to Effect Context
+				// FGameplayEffectContextHandle EffectContextHandle = Spec.GetContext();
+				// FGameplayEffectContext* Context = EffectContextHandle.Get();
+				// FAuraGameplayEffectContext* AuraContext = static_cast<FAuraGameplayEffectContext*>(Context);
 			}
 		}
 
