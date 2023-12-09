@@ -214,11 +214,14 @@ public:
 
 
 	
-private:	
+private:
+	void HandleIncomingDamage(const FEffectProperties& Props);
+	void HandleIncomingXP(const FEffectProperties& Props);
+	void Debuff(const FEffectProperties& Props);
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 	void ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit) const;
-	void SendXPEvent(FEffectProperties& Props);
-	void ShowLevelUpText(FEffectProperties& Props, int32 NewLevel);
+	void SendXPEvent(const FEffectProperties& Props);
+	void ShowLevelUpText(const FEffectProperties& Props, int32 NewLevel);
 	bool bTopOffHealth = false;
 	bool bTopOffMana = false;
 };
