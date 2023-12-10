@@ -14,7 +14,8 @@
 				"CoreUObject",
 				"UMG",
 				"EnhancedInput",
-				"AIModule"
+				"AIModule",
+				"Niagara"
 			]
 		}
 	],
