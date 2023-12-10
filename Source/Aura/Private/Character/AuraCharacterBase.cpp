@@ -30,7 +30,8 @@ AAuraCharacterBase::AAuraCharacterBase()
 
 	BurnDebuffComponent = CreateDefaultSubobject<UDebuffNiagaraComponent>("BurnDebuffComponent");
 	BurnDebuffComponent->SetupAttachment(GetRootComponent());
-	BurnDebuffComponent->DebuffTag = FAuraGameplayTags::Get().Debuff_Burn
+	BurnDebuffComponent->DebuffTag = FAuraGameplayTags::Get().Debuff_Burn;
+	
 }
 
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
@@ -71,7 +72,7 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 	bDead = true;
 
 	OnDeath.Broadcast(this);
-
+	BurnDebuffComponent->Deactivate();
 }
 
 void AAuraCharacterBase::BeginPlay()

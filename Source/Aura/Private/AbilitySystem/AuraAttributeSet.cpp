@@ -138,7 +138,9 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 
 		const bool bFatal = NewHealth <=0.f;
 		if (bFatal) //DIE
-			{
+		{
+			//TODO Use Death Impulse
+			
 			UE_LOG(LogTemp, Warning, TEXT("Fatal Damage to %s!"), *Props.TargetAvatarActor->GetName());	
 			if (ICombatInterface* CombatInterface = Cast<ICombatInterface>( Props.TargetAvatarActor))
 			{
@@ -147,7 +149,7 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 			//Send Gameplay Event with Meta Attribute XP
 			SendXPEvent(Props);
 
-			}
+		}
 		else
 		{				
 			//Activate Ability if TargetASC has one that has the HitReact Tag
@@ -186,7 +188,7 @@ void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 	Effect->DurationMagnitude = FScalableFloat(DebuffDuration);
 	Effect->Period = DebuffFrequency;
 
-	Effect->InheritableOwnedTagsContainer.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]);
+	// Effect->InheritableOwnedTagsContainer.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]); DEPRECATED
 	Effect->StackingType = EGameplayEffectStackingType::AggregateBySource;
 	Effect->StackLimitCount = 1;
 
@@ -202,7 +204,9 @@ void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 		FAuraGameplayEffectContext* AuraContext = static_cast<FAuraGameplayEffectContext*>(MutableSpec->GetContext().Get());
 		TSharedPtr<FGameplayTag> DebuffDamageType = MakeShareable(new FGameplayTag(DamageType));
 		AuraContext->SetDamageType(DebuffDamageType);
+		MutableSpec->DynamicGrantedTags.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]);
 		
+
 		Props.TargetASC->ApplyGameplayEffectSpecToSelf(*MutableSpec);
 
 	}
