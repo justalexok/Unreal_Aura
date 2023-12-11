@@ -36,7 +36,7 @@ protected:
 	float DebuffChance = 20.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
-	float DebuffDamage = 5.f;
+	float DebuffDamage = 0.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	float DebuffFrequency = 1.f;

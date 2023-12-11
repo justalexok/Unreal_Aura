@@ -139,15 +139,17 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 		const bool bFatal = NewHealth <=0.f;
 		if (bFatal) //DIE
 		{
-			//TODO Use Death Impulse
+			//Need effect context handle, call get death impulse
 			
 			UE_LOG(LogTemp, Warning, TEXT("Fatal Damage to %s!"), *Props.TargetAvatarActor->GetName());	
 			if (ICombatInterface* CombatInterface = Cast<ICombatInterface>( Props.TargetAvatarActor))
 			{
-				CombatInterface->Die();
+				FVector DeathImpulse = UAuraAbilitySystemLibrary::GetDeathImpulse(Props.EffectContextHandle);
+				CombatInterface->Die(DeathImpulse);
 			}
 			//Send Gameplay Event with Meta Attribute XP
 			SendXPEvent(Props);
+		}
 
 		}
 		else
@@ -168,7 +170,7 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 			Debuff(Props);
 		}
 	}
-}
+
 
 void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 {
