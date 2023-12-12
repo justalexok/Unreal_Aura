@@ -26,5 +26,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void SpawnProjectile(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag, bool bOverridePitch, const float PitchOveride);
 
+	UPROPERTY(EditDefaultsOnly)
+	int32 NumProjectiles = 5;
 	
 };
