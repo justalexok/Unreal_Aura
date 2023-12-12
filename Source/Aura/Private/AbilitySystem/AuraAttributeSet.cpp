@@ -151,25 +151,30 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 			SendXPEvent(Props);
 		}
 
-		}
-		else
-		{				
-			//Activate Ability if TargetASC has one that has the HitReact Tag
-			FGameplayTagContainer TagContainer;
-			TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
-			Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
-				
-		}
-
-		const bool bBlock = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
-		const bool bCriticalHit = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
-		ShowFloatingText(Props,LocalIncomingDamage, bBlock, bCriticalHit);
-
-		if (UAuraAbilitySystemLibrary::IsSuccessfulDebuff((Props.EffectContextHandle)))
-		{
-			Debuff(Props);
-		}
 	}
+	else
+	{				
+		//Activate Ability if TargetASC has one that has the HitReact Tag
+		FGameplayTagContainer TagContainer;
+		TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
+		Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+			
+	}
+
+	const FVector& KnockbackForce = UAuraAbilitySystemLibrary::GetKnockbackForce(Props.EffectContextHandle);
+	if (!KnockbackForce.IsNearlyZero(1.f))
+	{
+		Props.TargetCharacter->LaunchCharacter(KnockbackForce, true, true);
+	}
+	const bool bBlock = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
+	const bool bCriticalHit = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
+	ShowFloatingText(Props,LocalIncomingDamage, bBlock, bCriticalHit);
+
+	if (UAuraAbilitySystemLibrary::IsSuccessfulDebuff((Props.EffectContextHandle)))
+	{
+		Debuff(Props);
+	}
+}
 
 
 void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
