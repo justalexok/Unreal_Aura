@@ -8,6 +8,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
+#include "NiagaraFunctionLibrary.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Components/SplineComponent.h"
 #include "Input/AuraInputComponent.h"
@@ -103,8 +104,6 @@ void AAuraPlayerController::CursorTrace()
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	// GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, *InputTag.ToString());
-
 	//If Left Mouse Button, set bTargeting, and set AutoRunning to false ->Fire at enemy
 	//Only once button released will we know whether it was a short press (and therefore trigger autorunning) or not
 	if (InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
@@ -112,6 +111,10 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 		bTargeting = ThisActor ? true: false; //if clicked on an enemy actor
 		bAutoRunning = false;
 		//After Pressed, AbilityInputTagHeld is called
+	}
+	if (GetASC())
+	{
+		GetASC()->AbilityInputTagPressed(InputTag);
 	}
 }
 
@@ -156,6 +159,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 					bAutoRunning = true;
 				}
 			}
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ClickNiagaraSystem, CachedDestination);
 		}
 		FollowTime = 0.f;
 		bTargeting = false;

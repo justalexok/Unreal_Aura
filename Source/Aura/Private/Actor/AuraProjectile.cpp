@@ -43,12 +43,18 @@ void AAuraProjectile::OnHit()
 	if (LoopingSoundComponent)
 	{
 		LoopingSoundComponent->Stop();
+		LoopingSoundComponent->DestroyComponent();
 	}
 	bHit = true;
 }
 
 void AAuraProjectile::Destroyed()
 {
+	if (LoopingSoundComponent)
+	{
+		LoopingSoundComponent->Stop();
+		LoopingSoundComponent->DestroyComponent();
+	}
 	//If Client and has not yet been hit (ie. OnSphereOverlap has not been called yet)
 	if (!bHit &!HasAuthority())	OnHit();
 	Super::Destroyed();

@@ -8,6 +8,7 @@
 #include "UI/Widget/LevelUpTextComponent.h"
 #include "AuraPlayerController.generated.h"
 
+class UNiagaraSystem;
 class UDamageTextComponent;
 struct FInputActionValue;
 class UInputAction;
@@ -82,7 +83,10 @@ private:
 	float AutoRunAcceptanceRadius = 50.f; //What radius from destination do we stop autorunning
 
 	TObjectPtr<USplineComponent> Spline; // A smooth curve from a series of WorldContext points
-	
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UNiagaraSystem> ClickNiagaraSystem;
+
 	void AutoRun();
 
 	UPROPERTY(EditDefaultsOnly)
