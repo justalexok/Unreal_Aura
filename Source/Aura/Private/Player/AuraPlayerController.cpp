@@ -85,6 +85,14 @@ void AAuraPlayerController::AutoRun()
 
 void AAuraPlayerController::CursorTrace()
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_CursorTrace))
+	{
+		if (LastActor) LastActor->UnHighlightActor();
+		if (ThisActor) ThisActor->UnHighlightActor();
+		LastActor = nullptr;
+		ThisActor = nullptr;
+		return;
+	}
 	//Sets CursorHit every frame
 	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
 	
@@ -104,6 +112,8 @@ void AAuraPlayerController::CursorTrace()
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed)) return;
+	
 	//If Left Mouse Button, set bTargeting, and set AutoRunning to false ->Fire at enemy
 	//Only once button released will we know whether it was a short press (and therefore trigger autorunning) or not
 	if (InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
@@ -121,6 +131,8 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputReleased))	return;
+	
 	//If not Left Mouse Button released, execute func and return
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
@@ -159,7 +171,10 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 					bAutoRunning = true;
 				}
 			}
-			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ClickNiagaraSystem, CachedDestination);
+			if (GetASC() && !GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed))
+			{
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ClickNiagaraSystem, CachedDestination);
+			}
 		}
 		FollowTime = 0.f;
 		bTargeting = false;
@@ -179,9 +194,9 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		return;
 	}
 	//Pressing LMB and Targeting or Pressing LMB and ShiftKeyDown -> Execute FireBolt Ability
-	if (bTargeting || bShiftKeyDown)
+	if (bTargeting || bShiftKeyDown )
 	{
-		if (GetASC())
+		if (GetASC() && !GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed))
 		{
 			GetASC()->AbilityInputTagHeld(InputTag);
 		}
@@ -255,6 +270,8 @@ void AAuraPlayerController::SetupInputComponent()
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed)) return;
+	
 	//Get InputActionValue in Vector2D form so we can access X and Y values
 
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
