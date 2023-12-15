@@ -168,7 +168,9 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 	}
 	const bool bBlock = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
 	const bool bCriticalHit = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
+
 	ShowFloatingText(Props,LocalIncomingDamage, bBlock, bCriticalHit);
+
 
 	if (UAuraAbilitySystemLibrary::IsSuccessfulDebuff((Props.EffectContextHandle)))
 	{
@@ -211,8 +213,16 @@ void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 		FAuraGameplayEffectContext* AuraContext = static_cast<FAuraGameplayEffectContext*>(MutableSpec->GetContext().Get());
 		TSharedPtr<FGameplayTag> DebuffDamageType = MakeShareable(new FGameplayTag(DamageType));
 		AuraContext->SetDamageType(DebuffDamageType);
-		MutableSpec->DynamicGrantedTags.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]);
-		
+		const FGameplayTag& DebuffTag = GameplayTags.DamageTypesToDebuffs[DamageType];
+		MutableSpec->DynamicGrantedTags.AddTag(DebuffTag);
+		if (DebuffTag.MatchesTagExact(GameplayTags.Debuff_Stun))
+		{
+			MutableSpec->DynamicGrantedTags.AddTag(GameplayTags.Player_Block_CursorTrace);
+			MutableSpec->DynamicGrantedTags.AddTag(GameplayTags.Player_Block_InputHeld);
+			MutableSpec->DynamicGrantedTags.AddTag(GameplayTags.Player_Block_InputReleased);
+			MutableSpec->DynamicGrantedTags.AddTag(GameplayTags.Player_Block_InputPressed);
+
+		}
 
 		Props.TargetASC->ApplyGameplayEffectSpecToSelf(*MutableSpec);
 
