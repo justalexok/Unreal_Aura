@@ -153,18 +153,20 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 
 	}
 	else
-	{				
-		//Activate Ability if TargetASC has one that has the HitReact Tag
-		FGameplayTagContainer TagContainer;
-		TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
-		Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
-			
-	}
-
-	const FVector& KnockbackForce = UAuraAbilitySystemLibrary::GetKnockbackForce(Props.EffectContextHandle);
-	if (!KnockbackForce.IsNearlyZero(1.f))
 	{
-		Props.TargetCharacter->LaunchCharacter(KnockbackForce, true, true);
+		//Activate Ability if TargetASC has one that has the HitReact Tag
+		if (Props.TargetCharacter->Implements<UCombatInterface>() && !ICombatInterface::Execute_IsBeingShocked(Props.TargetCharacter))
+		{
+			FGameplayTagContainer TagContainer;
+			TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
+			Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+		}
+			
+		const FVector& KnockbackForce = UAuraAbilitySystemLibrary::GetKnockbackForce(Props.EffectContextHandle);
+		if (!KnockbackForce.IsNearlyZero(1.f))
+		{
+			Props.TargetCharacter->LaunchCharacter(KnockbackForce, true, true);
+		}
 	}
 	const bool bBlock = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
 	const bool bCriticalHit = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
